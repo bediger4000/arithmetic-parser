@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"unicode"
 )
 
@@ -134,7 +133,6 @@ func (l *Lexer) nextStateFn() stateFn {
 }
 
 func (l *Lexer) emit(t TokenType) {
-	fmt.Printf("emit(%s) %q\n", t, string(l.input[l.start:l.pos]))
 	l.items <- item{t, string(l.input[l.start:l.pos])}
 	l.start = l.pos
 }
