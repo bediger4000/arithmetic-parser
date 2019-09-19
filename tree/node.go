@@ -88,6 +88,8 @@ func (p *Node) Print(w io.Writer) {
 		oper = '*'
 	case lexer.DIV:
 		oper = '/'
+	case lexer.REM:
+		oper = '%'
 	case lexer.PLUS:
 		oper = '+'
 	case lexer.MINUS:
