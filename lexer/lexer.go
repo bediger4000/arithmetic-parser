@@ -47,7 +47,6 @@ type item struct {
 }
 
 type Lexer struct {
-	name        string
 	input       []rune
 	start       int
 	pos         int
@@ -59,9 +58,8 @@ type Lexer struct {
 
 type stateFn func(*Lexer) stateFn
 
-func Lex(name, input string) *Lexer {
+func Lex(input string) *Lexer {
 	l := &Lexer{
-		name:     name,
 		input:    []rune(input),
 		items:    make(chan item),
 		consumed: true,
