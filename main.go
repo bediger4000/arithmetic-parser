@@ -8,11 +8,22 @@ import (
 )
 
 func main() {
-	lxr := lexer.Lex("bob", os.Args[1])
+	dotFile := false
+	str := os.Args[1]
+	if str == "-g" {
+		dotFile = true
+		str = os.Args[2]
+	}
+
+	lxr := lexer.Lex(str)
 	psr := parser.NewParser(lxr)
 
 	tree := psr.Parse()
 
 	fmt.Printf("Reconstituted expression: %q\n", tree)
 	fmt.Printf("/* %d */\n", tree.Eval().Const)
+
+	if dotFile {
+		tree.GraphNode(os.Stdout)
+	}
 }
