@@ -60,6 +60,17 @@ func (p *Parser) term() *tree.Node {
 func (p *Parser) factor() *tree.Node {
 	kind, lexeme := p.lexer.NextToken()
 	switch kind {
+	case lexer.ADD_OP:
+		multiplier := -1
+		if lexeme == "+" {
+			multiplier = 1
+		}
+		p.lexer.Consume()
+		kind, lexeme := p.lexer.NextToken()
+		n := tree.NewNode(kind, lexeme)
+		p.lexer.Consume()
+		n.Const *= multiplier
+		return n
 	case lexer.CONSTANT:
 		p.lexer.Consume()
 		return tree.NewNode(kind, lexeme)
