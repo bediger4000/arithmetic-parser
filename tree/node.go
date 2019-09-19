@@ -145,6 +145,8 @@ func (p *Node) graphNode(w io.Writer) {
 		label = "/"
 	case lexer.MULT:
 		label = "*"
+	case lexer.REM:
+		label = "%"
 	}
 
 	fmt.Fprintf(w, "n%p [label=\"%s\"];\n", p, label)
