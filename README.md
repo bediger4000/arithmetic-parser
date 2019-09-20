@@ -54,11 +54,11 @@ as a guide.
 
 The grammar looks like this:
 
-    expr    &rarr; term   {add-op term}
-    term    &rarr; factor {mult-op factor}
-    factor  &rarr; '(' expr ')' | '-' NUMBER | NUMBER
-    add-op  &rarr; '+'|'-'
-    mult-op &rarr; '*'|'/'|'%'
+    expr     ->  term   {add-op term}
+    term     ->  factor {mult-op factor}
+    factor   ->  '(' expr ')' | '-' NUMBER | NUMBER
+    add-op   ->  '+'|'-'
+    mult-op  ->  '*'|'/'|'%'
 
 I added "%" (for remainder/modulo),
 and allowed negative numbers,
@@ -73,3 +73,12 @@ I was able to follow their rules to write the code:
   "consuming" that token from the input token string
 * | in the CFG leads to "if-else" in the parser
 * {...}in the CFG leads to *while* in the parser
+
+The grammar has to be correct for this sort of semi-mechanical
+coding to work.
+The tricky part was realizing that the parser needed to see what
+type of token it had,
+but not "use up" that token every time the parser looked at its type,
+or the lexeme itself.
+The "consuming" note in the The Ohio State handout
+didn't make sense until I realized that.
