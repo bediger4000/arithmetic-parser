@@ -8,10 +8,12 @@ import (
 
 /*
 expr -> term   {add-op term}
-term -> factor {mult-op factor}
+term -> spork {mult-op spork}
+spork -> factor {exp-op factor}
 factor -> '(' expr ')' | '-' NUMBER | NUMBER
 add-op -> '+'|'-'
 mult-op -> '*'|'/'|'%'
+exp-op -> '^'
 */
 
 /*
@@ -45,8 +47,20 @@ func (p *Parser) expr() *tree.Node {
 }
 
 func (p *Parser) term() *tree.Node {
-	node := p.factor()
+	node := p.spork()
 	for kind, lexeme := p.lexer.NextToken(); kind == lexer.MULT_OP; kind, lexeme = p.lexer.NextToken() {
+		tmp := tree.NewNode(kind, lexeme)
+		p.lexer.Consume()
+		tmp.Left = node
+		node = tmp
+		node.Right = p.spork()
+	}
+	return node
+
+}
+func (p *Parser) spork() *tree.Node {
+	node := p.factor()
+	for kind, lexeme := p.lexer.NextToken(); kind == lexer.EXP_OP; kind, lexeme = p.lexer.NextToken() {
 		tmp := tree.NewNode(kind, lexeme)
 		p.lexer.Consume()
 		tmp.Left = node
@@ -87,24 +101,6 @@ func (p *Parser) factor() *tree.Node {
 		fmt.Printf("Wanted a CONSTANT or LPAREN, got %v: %q\n", kind, lexeme)
 	}
 	return nil
-}
-
-func (p *Parser) addOp() *tree.Node {
-	kind, lexeme := p.lexer.NextToken()
-	if kind != lexer.ADD_OP {
-		fmt.Printf("Wanted an ADD-OP, got %v: %q\n", kind, lexeme)
-	}
-	p.lexer.Consume()
-	return tree.NewNode(kind, lexeme)
-}
-
-func (p *Parser) multOp() *tree.Node {
-	kind, lexeme := p.lexer.NextToken()
-	if kind != lexer.MULT_OP {
-		fmt.Printf("Wanted an MULT-OP, got %v: %q\n", kind, lexeme)
-	}
-	p.lexer.Consume()
-	return tree.NewNode(kind, lexeme)
 }
 
 func NewParser(lxr *lexer.Lexer) *Parser {

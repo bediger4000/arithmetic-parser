@@ -10,11 +10,13 @@ const (
 	EOF      TokenType = 0
 	ADD_OP   TokenType = iota
 	MULT_OP  TokenType = iota
+	EXP_OP   TokenType = iota
 	PLUS     TokenType = iota
 	MINUS    TokenType = iota
 	MULT     TokenType = iota
 	DIV      TokenType = iota
 	REM      TokenType = iota
+	EXP      TokenType = iota
 	CONSTANT TokenType = iota
 	LPAREN   TokenType = iota
 	RPAREN   TokenType = iota
@@ -117,6 +119,8 @@ func (l *Lexer) nextStateFn() stateFn {
 		return lexPlus
 	case '*':
 		return lexStar
+	case '^':
+		return lexExp
 	case '%':
 		return lexMod
 	case '\n':
@@ -174,6 +178,12 @@ func lexMinus(l *Lexer) stateFn {
 func lexSlash(l *Lexer) stateFn {
 	l.pos++
 	l.emit(MULT_OP)
+	return l.nextStateFn()
+}
+
+func lexExp(l *Lexer) stateFn {
+	l.pos++
+	l.emit(EXP_OP)
 	return l.nextStateFn()
 }
 

@@ -26,7 +26,7 @@ type Node struct {
 func NewNode(op lexer.TokenType, lexeme string) *Node {
 	var n Node
 	switch op {
-	case lexer.ADD_OP, lexer.MULT_OP:
+	case lexer.ADD_OP, lexer.MULT_OP, lexer.EXP_OP:
 		switch lexeme {
 		case "+":
 			n.Op = lexer.PLUS
@@ -36,6 +36,8 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 			n.Op = lexer.MULT
 		case "/":
 			n.Op = lexer.DIV
+		case "^":
+			n.Op = lexer.EXP
 		case "%":
 			n.Op = lexer.REM
 		}
@@ -60,6 +62,20 @@ func (p *Node) Eval() *Node {
 		return &Node{Const: p.Left.Eval().Const * p.Right.Eval().Const}
 	case lexer.REM:
 		return &Node{Const: p.Left.Eval().Const % p.Right.Eval().Const}
+	case lexer.EXP:
+		exponent := p.Right.Eval().Const
+		if exponent == 0 {
+			return &Node{Const: 1}
+		}
+		if exponent < 0 {
+			return &Node{Const: 0}
+		}
+		base := p.Left.Eval().Const
+		answer := 1
+		for ; exponent > 0; exponent-- {
+			answer *= base
+		}
+		return &Node{Const: answer}
 	}
 	return nil
 }
@@ -90,6 +106,8 @@ func (p *Node) Print(w io.Writer) {
 		oper = '/'
 	case lexer.REM:
 		oper = '%'
+	case lexer.EXP:
+		oper = '^'
 	case lexer.PLUS:
 		oper = '+'
 	case lexer.MINUS:
