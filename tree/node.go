@@ -67,6 +67,7 @@ func (p *Node) Eval() *Node {
 		if exponent == 0 {
 			return &Node{Const: 1}
 		}
+		// This is wrong
 		if exponent < 0 {
 			return &Node{Const: 0}
 		}
@@ -76,6 +77,7 @@ func (p *Node) Eval() *Node {
 			answer *= base
 		}
 		return &Node{Const: answer}
+		// what about fractional powers (1/2 == square root)
 	}
 	return nil
 }
