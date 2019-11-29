@@ -57,14 +57,14 @@ The grammar looks like this:
     expr     ->  term   {add-op term}
     term     ->  spork  {mult-op spork}
     spork    ->  factor {exp-op factor}
-    factor   ->  '(' expr ')' | '-' factor | NUMBER
+    factor   ->  '(' expr ')' | add-op factor | NUMBER
     add-op   ->  '+'|'-'
     mult-op  ->  '*'|'/'|'%'
     exp-op   ->  '^'
 
 I added "%" (for remainder/modulo),
 '^' (for exponentiation)
-and allowed negative numbers,
+and allowed unary positive and negative operators,
 to customize the exercize.
 
 I was able to follow their rules to write the code:
