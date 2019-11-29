@@ -20,10 +20,10 @@ func main() {
 
 	tree := psr.Parse()
 
-	fmt.Printf("Reconstituted expression: %q\n", tree)
-	fmt.Printf("/* %d */\n", tree.Eval().Const)
-
 	if dotFile {
 		tree.GraphNode(os.Stdout)
+	} else {
+		fmt.Printf("Reconstituted expression: %q\n", tree)
+		fmt.Printf("/* %d */\n", tree.Eval().Const)
 	}
 }
