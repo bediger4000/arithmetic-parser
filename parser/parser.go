@@ -75,7 +75,6 @@ func (p *Parser) factor() *tree.Node {
 	kind, lexeme := p.lexer.NextToken()
 	switch kind {
 	case lexer.ADD_OP:
-		fmt.Printf("func factor, ADD_OP, lexeme %q\n", lexeme)
 		unary_op := lexeme
 		p.lexer.Consume()
 		factor := p.factor()
