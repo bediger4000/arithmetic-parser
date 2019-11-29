@@ -20,6 +20,8 @@ const (
 	CONSTANT TokenType = iota
 	LPAREN   TokenType = iota
 	RPAREN   TokenType = iota
+	POSITIVE TokenType = iota
+	NEGATIVE TokenType = iota
 	EOL      TokenType = iota
 )
 
