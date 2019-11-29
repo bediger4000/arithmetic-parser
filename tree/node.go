@@ -49,11 +49,10 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 }
 
 func UnaryNode(unary_op string, factor *Node) *Node {
-	op := lexer.NEGATIVE
 	if unary_op == "+" {
-		op = lexer.POSITIVE
+		return factor
 	}
-	return &Node{Op: op, Right: factor}
+	return &Node{Op: lexer.NEGATIVE, Right: factor}
 }
 
 func (p *Node) Eval() *Node {
@@ -183,6 +182,10 @@ func (p *Node) graphNode(w io.Writer) {
 		label = "*"
 	case lexer.REM:
 		label = "%"
+	case lexer.EXP:
+		label = "^"
+	case lexer.NEGATIVE:
+		label = "~"
 	}
 
 	fmt.Fprintf(w, "n%p [label=\"%s\"];\n", p, label)
