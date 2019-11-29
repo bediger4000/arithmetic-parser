@@ -48,6 +48,14 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 	return &n
 }
 
+func UnaryNode(unary_op string, factor *Node) *Node {
+	op := lexer.NEGATIVE
+	if unary_op == "+" {
+		op = lexer.POSITIVE
+	}
+	return &Node{Op: op, Right: factor}
+}
+
 func (p *Node) Eval() *Node {
 	switch p.Op {
 	case lexer.CONSTANT:
@@ -62,6 +70,10 @@ func (p *Node) Eval() *Node {
 		return &Node{Const: p.Left.Eval().Const * p.Right.Eval().Const}
 	case lexer.REM:
 		return &Node{Const: p.Left.Eval().Const % p.Right.Eval().Const}
+	case lexer.POSITIVE:
+		return &Node{Const: p.Right.Eval().Const}
+	case lexer.NEGATIVE:
+		return &Node{Const: -1 * p.Right.Eval().Const}
 	case lexer.EXP:
 		exponent := p.Right.Eval().Const
 		if exponent == 0 {
@@ -114,7 +126,7 @@ func (p *Node) Print(w io.Writer) {
 		oper = '+'
 	case lexer.MINUS:
 		oper = '-'
-	case lexer.CONSTANT:
+	case lexer.CONSTANT, lexer.POSITIVE, lexer.NEGATIVE:
 		oper = 0
 	}
 	if oper != 0 {
@@ -123,6 +135,10 @@ func (p *Node) Print(w io.Writer) {
 
 	if p.Op == lexer.CONSTANT {
 		fmt.Fprintf(w, "%d", p.Const)
+	}
+
+	if p.Op == lexer.NEGATIVE {
+		fmt.Fprint(w, "-")
 	}
 
 	if p.Right != nil {
