@@ -55,12 +55,15 @@ as a guide.
 The grammar looks like this:
 
     expr     ->  term   {add-op term}
-    term     ->  factor {mult-op factor}
-    factor   ->  '(' expr ')' | '-' NUMBER | NUMBER
+    term     ->  spork  {mult-op spork}
+    spork    ->  factor {exp-op factor}
+    factor   ->  '(' expr ')' | '-' factor | NUMBER
     add-op   ->  '+'|'-'
     mult-op  ->  '*'|'/'|'%'
+    exp-op   ->  '^'
 
 I added "%" (for remainder/modulo),
+'^' (for exponentiation)
 and allowed negative numbers,
 to customize the exercize.
 
