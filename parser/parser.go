@@ -26,10 +26,13 @@ exp-op -> '^'
 * {...} in the grammar leads to "while" in the parser
 */
 
+// Parser carries around what it needs to create
+// a parse tree from a stream of lexer tokens
 type Parser struct {
 	lexer *lexer.Lexer
 }
 
+// Parse starts building a parse tree, and returns it
 func (p *Parser) Parse() *tree.Node {
 	return p.expr()
 }
@@ -75,10 +78,10 @@ func (p *Parser) factor() *tree.Node {
 	kind, lexeme := p.lexer.NextToken()
 	switch kind {
 	case lexer.ADD_OP:
-		unary_op := lexeme
+		unaryOp := lexeme
 		p.lexer.Consume()
 		factor := p.factor()
-		return tree.UnaryNode(unary_op, factor)
+		return tree.UnaryNode(unaryOp, factor)
 	case lexer.CONSTANT:
 		p.lexer.Consume()
 		return tree.NewNode(kind, lexeme)
@@ -97,6 +100,7 @@ func (p *Parser) factor() *tree.Node {
 	return nil
 }
 
+// NewParser creates a filled in Parser struct and returns it.
 func NewParser(lxr *lexer.Lexer) *Parser {
 	return &Parser{lexer: lxr}
 }
