@@ -4,11 +4,12 @@ package tree
 // and associated utility functions and methods.
 
 import (
-	"arithmetic-parser/lexer"
 	"bytes"
 	"fmt"
 	"io"
 	"strconv"
+
+	"arithmetic-parser/lexer"
 )
 
 // Node has all elements exported, everything reaches inside instances
