@@ -4,6 +4,8 @@ import (
 	"unicode"
 )
 
+// TokenType tells parser what the lexer thinks
+// the category for this token is.
 type TokenType int
 
 // EOF and others: all the types of tokens
@@ -51,11 +53,12 @@ type item struct {
 	lexeme string
 }
 
+// Lexer instances hold information needed to break
+// a string into arithmetic expression tokens.
 type Lexer struct {
 	input       []rune
 	start       int
 	pos         int
-	width       int
 	items       chan item
 	currentItem item
 	consumed    bool
@@ -63,6 +66,8 @@ type Lexer struct {
 
 type stateFn func(*Lexer) stateFn
 
+// Lex creates a new ready-to-go Lexer instance.
+// Runs a goroutine in the background.
 func Lex(input string) *Lexer {
 	l := &Lexer{
 		input:    []rune(input),
@@ -73,6 +78,8 @@ func Lex(input string) *Lexer {
 	return l
 }
 
+// NextToken called by parser to retrieve whatever
+// the lexer thinks is the next token.
 func (l *Lexer) NextToken() (TokenType, string) {
 	if l.consumed {
 		l.currentItem = <-l.items
@@ -81,6 +88,9 @@ func (l *Lexer) NextToken() (TokenType, string) {
 	return l.currentItem.kind, l.currentItem.lexeme
 }
 
+// Consume called by parser when it has found a place in the parse tree for the
+// token. Parse can and does call NextToken() repeatedly to find out the
+// token's type.
 func (l *Lexer) Consume() {
 	l.consumed = true
 }
@@ -134,7 +144,6 @@ func (l *Lexer) nextStateFn() stateFn {
 		}
 		return lexWhiteSpace
 	}
-	return nil
 }
 
 func (l *Lexer) emit(t TokenType) {
