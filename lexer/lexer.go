@@ -6,6 +6,7 @@ import (
 
 type TokenType int
 
+// EOF and others: all the types of tokens
 const (
 	EOF      TokenType = 0
 	ADD_OP   TokenType = iota
