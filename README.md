@@ -1,5 +1,7 @@
 # Arithmetic Expressions, lexer and parser
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/bediger4000/arithmetic-parser)](https://goreportcard.com/report/github.com/bediger4000/arithmetic-parser)
+
 Another cut at a Golang algebraic-order-of-operations arithmetic
 expression evaluator.
 
