@@ -49,13 +49,18 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 	return &n
 }
 
-func UnaryNode(unary_op string, factor *Node) *Node {
-	if unary_op == "+" {
+// UnaryNode creates a node from a unary "+" or "-"
+// and the factor to the right of it.
+func UnaryNode(unaryOp string, factor *Node) *Node {
+	if unaryOp == "+" {
 		return factor
 	}
 	return &Node{Op: lexer.NEGATIVE, Right: factor}
 }
 
+// Eval recursively traverses a parse tree for an arithmetic expression.
+// It returns numeric answers when it can, and does arithmetic
+// operations on numbers.
 func (p *Node) Eval() *Node {
 	switch p.Op {
 	case lexer.CONSTANT:
