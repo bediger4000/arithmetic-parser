@@ -10,7 +10,7 @@ import (
 expr -> term   {add-op term}
 term -> spork {mult-op spork}
 spork -> factor {exp-op factor}
-factor -> '(' expr ')' | '-' NUMBER | NUMBER
+factor -> '(' expr ')' | '-' factor | '+' factor | NUMBER
 add-op -> '+'|'-'
 mult-op -> '*'|'/'|'%'
 exp-op -> '^'
