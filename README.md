@@ -64,6 +64,9 @@ The grammar looks like this:
     mult-op  ->  '*'|'/'|'%'
     exp-op   ->  '^'
 
+Punctuation (parentheses), operation signs and numbers
+are terminal symbols.
+
 I added "%" (for remainder/modulo),
 '^' (for exponentiation)
 and allowed unary positive and negative operators,
