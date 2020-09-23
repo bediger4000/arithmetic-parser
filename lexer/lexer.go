@@ -9,8 +9,12 @@ import (
 type TokenType int
 
 // EOF and others: all the types of tokens
+// ADD_OP, MULT_OP, EXP_OP aren't individual operation
+// tokens, but rather levels of precedence. The lexeme
+// for a MULT_OP will be "*" or "/" or "%", which all have
+// the same level of precedence.
 const (
-	EOF      TokenType = 0
+	EOF      TokenType = iota
 	ADD_OP   TokenType = iota
 	MULT_OP  TokenType = iota
 	EXP_OP   TokenType = iota
