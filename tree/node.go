@@ -7,19 +7,19 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"strconv"
 
 	"arithmetic-parser/lexer"
+	"arithmetic-parser/value"
 )
 
 // Node has all elements exported, everything reaches inside instances
 // of Node to find things out, or to change Left and Right. Private
 // elements would cost me gross ol' getter and setter boilerplate.
 type Node struct {
-	Op    lexer.TokenType
-	Const int
-	Left  *Node
-	Right *Node
+	Op     lexer.TokenType
+	Lexeme string
+	Left   *Node
+	Right  *Node
 }
 
 // NewNode creates interior nodes of a parse tree, which will
@@ -44,7 +44,7 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 		}
 	case lexer.CONSTANT:
 		n.Op = lexer.CONSTANT
-		n.Const, _ = strconv.Atoi(lexeme)
+		n.Lexeme = lexeme
 	}
 	return &n
 }
@@ -55,48 +55,20 @@ func UnaryNode(unaryOp string, factor *Node) *Node {
 	if unaryOp == "+" {
 		return factor
 	}
-	return &Node{Op: lexer.NEGATIVE, Right: factor}
+	// "-Something" because 0 - Something
+	return &Node{Op: lexer.MINUS, Left: &Node{Op: lexer.CONSTANT, Lexeme: "0"}, Right: factor}
 }
 
 // Eval recursively traverses a parse tree for an arithmetic expression.
 // It returns numeric answers when it can, and does arithmetic
 // operations on numbers.
-func (p *Node) Eval() *Node {
-	switch p.Op {
-	case lexer.CONSTANT:
-		return p
-	case lexer.PLUS:
-		return &Node{Const: p.Left.Eval().Const + p.Right.Eval().Const}
-	case lexer.MINUS:
-		return &Node{Const: p.Left.Eval().Const - p.Right.Eval().Const}
-	case lexer.DIV:
-		return &Node{Const: p.Left.Eval().Const / p.Right.Eval().Const}
-	case lexer.MULT:
-		return &Node{Const: p.Left.Eval().Const * p.Right.Eval().Const}
-	case lexer.REM:
-		return &Node{Const: p.Left.Eval().Const % p.Right.Eval().Const}
-	case lexer.POSITIVE:
-		return &Node{Const: p.Right.Eval().Const}
-	case lexer.NEGATIVE:
-		return &Node{Const: -1 * p.Right.Eval().Const}
-	case lexer.EXP:
-		exponent := p.Right.Eval().Const
-		if exponent == 0 {
-			return &Node{Const: 1}
-		}
-		// This is wrong
-		if exponent < 0 {
-			return &Node{Const: 0}
-		}
-		base := p.Left.Eval().Const
-		answer := 1
-		for ; exponent > 0; exponent-- {
-			answer *= base
-		}
-		return &Node{Const: answer}
-		// what about fractional powers (1/2 == square root)
+func (p *Node) Eval() value.Value {
+	if p.Op == lexer.CONSTANT {
+		return value.NewValue(p.Lexeme)
 	}
-	return nil
+	left := p.Left.Eval()
+	right := p.Right.Eval()
+	return left.BinaryOp(p.Op, right)
 }
 
 // Print puts a human-readable, nicely formatted string representation
@@ -139,7 +111,7 @@ func (p *Node) Print(w io.Writer) {
 	}
 
 	if p.Op == lexer.CONSTANT {
-		fmt.Fprintf(w, "%d", p.Const)
+		fmt.Fprintf(w, "%s", p.Lexeme)
 	}
 
 	if p.Op == lexer.NEGATIVE {
@@ -177,7 +149,7 @@ func (p *Node) graphNode(w io.Writer) {
 
 	switch p.Op {
 	case lexer.CONSTANT:
-		label = fmt.Sprintf("%d", p.Const)
+		label = fmt.Sprintf("%s", p.Lexeme)
 	case lexer.MINUS:
 		label = "-"
 	case lexer.PLUS:
