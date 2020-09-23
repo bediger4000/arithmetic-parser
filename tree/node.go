@@ -24,6 +24,9 @@ type Node struct {
 
 // NewNode creates interior nodes of a parse tree, which will
 // all have a +, -, *, / operator associated
+// The lexer ADD_OP, MULT_OP, EXP_OP constants exist to
+// have precedence levels with more than one operation at
+// each precedence.
 func NewNode(op lexer.TokenType, lexeme string) *Node {
 	var n Node
 	switch op {
@@ -49,8 +52,9 @@ func NewNode(op lexer.TokenType, lexeme string) *Node {
 	return &n
 }
 
-// UnaryNode creates a node from a unary "+" or "-"
-// and the factor to the right of it.
+// UnaryNode handles "-something" and "+something" situtations.
+// It returns "something" in "+something" cases,
+// but sets up a "0 - something" sub-tree for unary negation.
 func UnaryNode(unaryOp string, factor *Node) *Node {
 	if unaryOp == "+" {
 		return factor
