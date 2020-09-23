@@ -24,6 +24,6 @@ func main() {
 		tree.GraphNode(os.Stdout)
 	} else {
 		fmt.Printf("Reconstituted expression: %q\n", tree)
-		fmt.Printf("/* %d */\n", tree.Eval().Const)
+		fmt.Printf("/* %s */\n", tree.Eval())
 	}
 }
