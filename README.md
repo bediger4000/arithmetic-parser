@@ -90,3 +90,28 @@ but not "use up" that token every time the parser looked at its type,
 or the lexeme itself.
 The "consuming" note in the The Ohio State handout
 didn't make sense until I realized that.
+
+## Expression evaluation
+
+I borrowed an interface from a [2010 Google I/O talk](https://blog.golang.org/io2010)
+by Rob Pike and Russ Cox.
+
+The interface looks like this:
+
+```go
+type Value interface {
+    BinaryOp(op lexer.TokenType, y Value) Value
+    String() string
+}
+```
+
+It has an integer arithmetic implementation,
+and an error holder implementation.
+Package `tree` creates new `Value` instances and
+calls `BinaryOp()` on them.
+This simplifies `tree.Node.Eval()` immensely,
+and separates arithmetic from parse tree
+Because there's an error holder implementation,
+reporting run-time problems like divide-by-zero
+becomes much easier.
+at the cost of moving that code into package `value`.
