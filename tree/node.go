@@ -59,13 +59,11 @@ func UnaryNode(unaryOp string, factor *Node) *Node {
 	if unaryOp == "+" {
 		return factor
 	}
-	// "-Something" because 0 - Something
 	return &Node{Op: lexer.MINUS, Left: &Node{Op: lexer.CONSTANT, Lexeme: "0"}, Right: factor}
 }
 
 // Eval recursively traverses a parse tree for an arithmetic expression.
-// It returns numeric answers when it can, and does arithmetic
-// operations on numbers.
+// It uses type value.Value to do the numerical evaluation.
 func (p *Node) Eval() value.Value {
 	if p.Op == lexer.CONSTANT {
 		return value.NewValue(p.Lexeme)
@@ -135,16 +133,10 @@ func (p *Node) Print(w io.Writer) {
 	}
 }
 
-// ExpressionToString creates a Golang string with a human readable
-// representation of a parse tree in it.
-func ExpressionToString(root *Node) string {
-	var sb bytes.Buffer
-	root.Print(&sb)
-	return sb.String()
-}
-
 func (p *Node) String() string {
-	return ExpressionToString(p)
+	var sb bytes.Buffer
+	p.Print(&sb)
+	return sb.String()
 }
 
 func (p *Node) graphNode(w io.Writer) {
