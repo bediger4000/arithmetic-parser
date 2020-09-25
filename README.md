@@ -8,8 +8,9 @@ expression evaluator.
 Compare to [my earlier incarnation](https://github.com/bediger4000/arithmetic-expressions)
 which was more-or-less a Go transliteration of a C program.
 
-This version does share the implementation of the parse tree
+This version does share most of the implementation of the parse tree
 with my earlier incarnation.
+It has an idiomatic Go arithmetic evaluation.
 
 ## Build
 
