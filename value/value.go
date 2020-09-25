@@ -46,7 +46,13 @@ func (x Int) BinaryOp(op lexer.TokenType, y Value) Value {
 				return Error(fmt.Sprintf("division by zero: '%v / %v'", x, y))
 			}
 			return x / y
-		// case lexer.EXP: // not implemented, falls through to illegal op
+		case lexer.EXP:
+			n := Int(1)
+			for y > 0 {
+				n *= x
+				y--
+			}
+			return n
 		case lexer.REM:
 			if y == 0 {
 				return Error(fmt.Sprintf("modulo of zero: '%v %% %v'", x, y))
