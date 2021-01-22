@@ -73,6 +73,7 @@ I added "%" (for remainder/modulo),
 and allowed unary positive and negative operators,
 to customize the exercize.
 
+"CFG" below abbreviates "context free grammar".
 I was able to follow their rules to write the code:
 
 * One parse method per non-terminal symbol
@@ -111,7 +112,7 @@ and an error holder implementation.
 Package `tree` creates new `Value` instances and
 calls `BinaryOp()` on them.
 This simplifies `tree.Node.Eval()` immensely,
-and separates arithmetic from parse tree
+and separates arithmetic from parse tree.
 Because there's an error holder implementation,
 reporting run-time problems like divide-by-zero
 becomes much easier.
