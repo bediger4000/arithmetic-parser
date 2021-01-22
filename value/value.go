@@ -30,7 +30,8 @@ type Int int
 
 func (x Int) String() string { return strconv.Itoa(int(x)) }
 
-// BinaryOp implements integer arithmetic for type Int
+// BinaryOp implements integer arithmetic for type Int.
+// Some error handling exists, but it does not check overflow.
 func (x Int) BinaryOp(op lexer.TokenType, y Value) Value {
 	switch y := y.(type) {
 	case Int:
@@ -65,14 +66,14 @@ func (x Int) BinaryOp(op lexer.TokenType, y Value) Value {
 	return Error(fmt.Sprintf("illegal op: '%v %s %v'", x, op, y))
 }
 
-// Error implements Value interface for pushing errors up the stack
+// Error implements Value interface for sending errors up the call stack
 type Error string
 
 func (e Error) String() string {
 	return string(e)
 }
 
-// BinaryOp makes Xerror instances into fit interface Value
+// BinaryOp makes Error instances fit interface Value
 func (e Error) BinaryOp(op lexer.TokenType, y Value) Value {
 	return e
 }
