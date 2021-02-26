@@ -47,7 +47,7 @@ Using a lexer struct looks like some object oriented
 garbage, but under the hood, it's asynchronous with the parser.
 
 Following along with Rob Pike and understanding his lexer design
-was my motivation for this little project.
+was my motivation for this project.
 
 ## Parser
 
@@ -67,6 +67,9 @@ The grammar looks like this:
 
 Punctuation (parentheses), operation signs and numbers
 are terminal symbols.
+
+I use "spork" as a name to get an extra level of precedence.
+There's got to be an official name for this precedence.
 
 I added "%" (for remainder/modulo),
 '^' (for exponentiation)
@@ -96,7 +99,8 @@ didn't make sense until I realized that.
 ## Expression evaluation
 
 I borrowed an interface from a [2010 Google I/O talk](https://blog.golang.org/io2010)
-by Rob Pike and Russ Cox.
+by Rob Pike and Russ Cox
+to do the actual arithmetic.
 
 The interface looks like this:
 
