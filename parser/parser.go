@@ -61,6 +61,7 @@ func (p *Parser) term() *tree.Node {
 	return node
 
 }
+
 func (p *Parser) spork() *tree.Node {
 	node := p.factor()
 	for kind, lexeme := p.lexer.NextToken(); kind == lexer.EXP_OP; kind, lexeme = p.lexer.NextToken() {
