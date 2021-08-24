@@ -12,6 +12,59 @@ This version does share most of the implementation of the parse tree
 with my earlier incarnation.
 It has an idiomatic Go arithmetic evaluation.
 
+## Daily Coding Problem: Problem #974 [Hard]
+
+This repo is a good, albeit over-elaborate, solution to a Daily Coding Problem.
+
+---
+This problem was asked by Facebook.
+
+Given a string consisting of parentheses,
+single digits,
+and positive and negative signs,
+convert the string into a mathematical expression to obtain the answer.
+
+Don't use eval or a similar built-in parser.
+
+For example, given `-1 + (2 + 3)`, you should return 4.
+
+---
+
+### Interview Analysis
+
+Darn tootin, this is a "[Hard]" problem.
+It requires lexing, parsing (a grammar),
+and code to evaluate the parser's output.
+
+The problem statement is phrased in a way to make the lexing easier,
+in that number representations only have a single digit.
+The solution also doesn't have to account for multiplication and division.
+The example does have a unary minus sign,
+and that complicates the grammar.
+
+This can't possibly be a whiteboard question.
+There's too much to it - lexing, a grammar,
+and evaluation of a parse tree.
+The only way to "solve" this as a whiteboard question would be to talk
+over the different pieces,
+offering a general design rather than a specific implementation.
+
+It could be a take home question.
+It's not out of the realm of possibility to do this in 3 or 4 hours,
+although the solution wouldn't be general or robust.
+The candidate would almost have to use a parser generator (like yacc, or bison)
+unless they already had something like the recursive descent parser
+in this repo on hand.
+
+I'm not too sure what an interviewer could expect from this question,
+other than a lot of talk about design.
+Implementation code would be extensive, and thus hard to completely review.
+If the interviewer just looks for a design,
+discussion of lexing and parsing pecularities like the unary minus would be a good sign.
+Discussion of implementation alternatives (hand-written vs generated lexer and parser),
+and how to do evaluation of parsed code, including error handling,
+might be things to look for.
+
 ## Build
 
     $ cd $GOPATH/src
